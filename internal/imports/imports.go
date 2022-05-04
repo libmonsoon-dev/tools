@@ -37,9 +37,10 @@ type Options struct {
 	Fragment  bool // Accept fragment of a source file (no package statement)
 	AllErrors bool // Report all errors (not just the first 10 on different lines)
 
-	Comments  bool // Print comments (true if nil *Options provided)
-	TabIndent bool // Use tabs for indent (true if nil *Options provided)
-	TabWidth  int  // Tab width (8 if nil *Options provided)
+	Comments     bool // Print comments (true if nil *Options provided)
+	TabIndent    bool // Use tabs for indent (true if nil *Options provided)
+	TabWidth     int  // Tab width (8 if nil *Options provided)
+	ForceRewrite bool
 
 	FormatOnly bool // Disable the insertion and deletion of imports
 }
@@ -105,7 +106,7 @@ func ApplyFixes(fixes []*ImportFix, filename string, src []byte, opt *Options, e
 
 func formatFile(fileSet *token.FileSet, file *ast.File, src []byte, adjust func(orig []byte, src []byte) []byte, opt *Options) ([]byte, error) {
 	mergeImports(fileSet, file)
-	sortImports(opt.LocalPrefix, fileSet, file)
+	sortImports(opt, fileSet, file)
 	imps := astutil.Imports(fileSet, file)
 	var spacesBefore []string // import paths we need spaces before
 	for _, impSection := range imps {

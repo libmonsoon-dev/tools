@@ -11,7 +11,6 @@ import (
 	"flag"
 	"fmt"
 	"go/scanner"
-	exec "golang.org/x/sys/execabs"
 	"io"
 	"io/ioutil"
 	"log"
@@ -21,6 +20,7 @@ import (
 	"runtime/pprof"
 	"strings"
 
+	exec "golang.org/x/sys/execabs"
 	"golang.org/x/tools/internal/gocommand"
 	"golang.org/x/tools/internal/imports"
 )
@@ -54,6 +54,7 @@ func init() {
 	flag.BoolVar(&options.AllErrors, "e", false, "report all errors (not just the first 10 on different lines)")
 	flag.StringVar(&options.LocalPrefix, "local", "", "put imports beginning with this string after 3rd-party packages; comma-separated list")
 	flag.BoolVar(&options.FormatOnly, "format-only", false, "if true, don't fix imports and only format. In this mode, goimports is effectively gofmt, with the addition that imports are grouped into sections.")
+	flag.BoolVar(&options.ForceRewrite, "force-rewrite", false, "force rewrite import blocks order")
 }
 
 func report(err error) {
